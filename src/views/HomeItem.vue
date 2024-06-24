@@ -1,21 +1,20 @@
 <template>
-  <div id="app">
-    <Home />
+  <div>
+    <UploadComponent />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Home from '@/views/HomeItem.vue'
+import UploadComponent from '@/components/UploadComponent.vue'
 
 export default defineComponent({
-  name: 'App',
   components: {
-    Home
+    UploadComponent
   }
 })
 </script>
 
-<style>
+<style scoped>
 /* Add your styles here */
 </style>

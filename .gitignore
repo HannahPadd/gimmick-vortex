@@ -33,3 +33,4 @@ coverage
 .yarn/*
 /.yarn
 /.vscode
+/server/uploads

@@ -13,7 +13,9 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "vue": "^3.4.29"
+    "axios": "^1.7.2",
+    "vue": "^3.4.29",
+    "vue-ts-types": "^1.6.2"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",
