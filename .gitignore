@@ -1,108 +1,35 @@
-# Node modules
-node_modules/
-
-# Yarn
-.yarn/cache/
-.yarn/unplugged/
-.yarn/build-state.yml
-.yarn/install-state.gz
-.pnp.*
-
 # Logs
 logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Dependency directories
-jspm_packages/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Output of 'npm pack'
-*.tgz
-
-# Output of 'yarn pack'
-*.tar.gz
-
-# dotenv environment variables file
-.env
-.env.test
-.env.production
-.env.local
-.env.*.local
-
-# Optional REPL history
-.node_repl_history
-
-# Built files
-dist/
-build/
-
-# Coverage directory used by tools like istanbul
-coverage/
-
-# nyc test coverage
-.nyc_output/
-
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt/
-
-# Bower dependency directory (https://bower.io/)
-bower_components/
-
-# Protractor end-to-end tests
-e2e/*.log
-
-# Miscellaneous
+node_modules
 .DS_Store
-*.pem
-*.pid
-*.seed
-*.pid.lock
-*.sublime-project
-*.sublime-workspace
+dist
+dist-ssr
+coverage
+*.local
 
-# vscode specific files
-.vscode/
-.history/
+/cypress/videos/
+/cypress/screenshots/
 
-# IDEs and editors
-.idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-*
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# IntelliJ IDEA
-*.iml
-*.iws
-*.ipr
-.idea/
+*.tsbuildinfo
 
-# OS specific files
-Thumbs.db
-.DS_Store
-
-# Optional stylelint cache
-.stylelintcache
-
-# Optional stylelint config
-.stylelintrc
-
-# Prettier configuration
-.prettierrc
-.prettierignore
-
-# Mac specific files
-._*
-
-# TernJS port file
-.tern-port
+#yarn
+.yarn/*
+/.yarn
+/.vscode
