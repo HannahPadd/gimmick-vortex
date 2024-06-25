@@ -31,7 +31,7 @@ interface ChartData {
   chartHeader: string
   type: string
   tag: string
-  difficultyTag: string
+  difficultyNumber: string
   difficulty: string
   notes: string[][]
 }

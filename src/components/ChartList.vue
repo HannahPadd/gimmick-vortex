@@ -3,7 +3,7 @@
     <h3>Charts:</h3>
     <div v-for="(chart, index) in charts" :key="index">
       <h4>Chart Type: {{ chart.type }}</h4>
-      <h4>Difficulty: {{ chart.difficultyTag }} {{ chart.difficulty }}</h4>
+      <h4>Difficulty: {{ chart.difficultyNumber }} {{ chart.difficulty }}</h4>
       <ul>
         <li v-for="(noteGroup, noteGroupIndex) in chart.notes" :key="noteGroupIndex">
           {{ noteGroup.join(', ') }}
@@ -22,7 +22,7 @@ interface ChartData {
   chartHeader: string
   type: string
   tag: string
-  difficultyTag: string
+  difficultyNumber: string
   difficulty: string
   notes: string[][]
 }

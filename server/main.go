@@ -24,8 +24,8 @@ type ChartData struct {
 	ChartHeader   string     `json:"chartHeader"`
 	Type          string     `json:"type"`
 	Tag           string     `json:"tag"`
-	DifficultyTag string     `json:"difficultyTag"`
 	Difficulty    string     `json:"difficulty"`
+	DifficultyNumber string     `json:"difficultyNumber"`
 	Notes         [][]string `json:"notes"`
 }
 
@@ -68,7 +68,7 @@ func uploadFileHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Type: %s\n", chart.Type)
 		fmt.Printf("Tag: %s\n", chart.Tag)
 		fmt.Printf("Difficulty: %s\n", chart.Difficulty)
-		fmt.Printf("Difficulty Tag: %s\n", chart.DifficultyTag)
+		fmt.Printf("Difficulty Tag: %s\n", chart.DifficultyNumber)
 		fmt.Println("Notes:")
 	}
 
@@ -79,7 +79,7 @@ func uploadFileHandler(w http.ResponseWriter, r *http.Request) {
 func parseSMFile(data string) (*SongData, error) {
 	scanner := bufio.NewScanner(strings.NewReader(data))
 	songData := &SongData{}
-	var currentType, currentTag, currentDifficulty, currentDifficultyTag string
+	var currentType, currentTag, currentDifficulty, currentDifficultyNumber string
 	var notes []string
 	var metaFields []string
 	var inNotesSection bool
@@ -103,7 +103,7 @@ func parseSMFile(data string) (*SongData, error) {
 					Type:          currentType,
 					Tag:           currentTag,
 					Difficulty:    currentDifficulty,
-					DifficultyTag: currentDifficultyTag,
+					DifficultyNumber: currentDifficultyNumber,
 					Notes:         convertNotesTo2DArray(notes),
 				})
 				notes = []string{} // Reset notes for the next chart
@@ -117,10 +117,10 @@ func parseSMFile(data string) (*SongData, error) {
 				metaFields = append(metaFields, scanner.Text())
 			}
 			if len(metaFields) >= 5 {
-				currentType = strings.TrimSpace(metaFields[0])
-				currentTag = strings.TrimSpace(metaFields[1])
-				currentDifficulty = strings.TrimSpace(metaFields[2])
-				currentDifficultyTag = strings.TrimSpace(metaFields[3])
+				currentType = trimSuffixColon(metaFields[0])
+				currentTag = trimSuffixColon(metaFields[1])
+				currentDifficulty = trimSuffixColon(metaFields[2])
+				currentDifficultyNumber = trimSuffixColon(metaFields[3])
 			}
 		} else if inNotesSection && line != ";" {
 			notes = append(notes, line)
@@ -134,7 +134,7 @@ func parseSMFile(data string) (*SongData, error) {
 			Type:          currentType,
 			Tag:           currentTag,
 			Difficulty:    currentDifficulty,
-			DifficultyTag: currentDifficultyTag,
+			DifficultyNumber: currentDifficultyNumber,
 			Notes:         convertNotesTo2DArray(notes),
 		})
 	}
