@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h2>{{ songData.title }}</h2>
+  <div class="songdetails-container">
+    <h2>Songname: {{ songData.title }}</h2>
     <p>Artist: {{ songData.artist }}</p>
     <p>BPMS: {{ songData.bpms }}</p>
   </div>
@@ -25,3 +25,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+.songdetails-container {
+  margin-top: 50px;
+}
+</style>

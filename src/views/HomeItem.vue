@@ -1,6 +1,6 @@
 <template>
-  <h1>Gimmick Vortex</h1>
-  <div>
+  <TopBar />
+  <div class="content">
     <UploadComponent />
   </div>
 </template>
@@ -8,9 +8,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import UploadComponent from '@/components/UploadComponent.vue'
+import TopBar from '@/components/TopBar.vue'
 
 export default defineComponent({
   components: {
+    TopBar,
     UploadComponent
   }
 })

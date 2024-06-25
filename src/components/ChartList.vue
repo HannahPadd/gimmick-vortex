@@ -1,5 +1,5 @@
 <template>
-  <div v-if="charts && charts.length > 0">
+  <div v-if="charts && charts.length > 0" class="chart-container">
     <h3>Charts:</h3>
     <div v-for="(chart, index) in charts" :key="index" class="chart">
       <h4>Chart Type: {{ chart.type }}</h4>
@@ -51,6 +51,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.chart-container {
+  margin-top: 20px;
+}
+
 .chart {
   margin-bottom: 20px;
 }
