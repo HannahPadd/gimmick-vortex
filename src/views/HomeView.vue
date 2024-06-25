@@ -5,7 +5,6 @@
   </div>
   <div class="content">
     <UploadComponent />
-    <ChartRenderer />
   </div>
 </template>
 

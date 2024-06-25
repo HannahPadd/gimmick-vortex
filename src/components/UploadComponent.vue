@@ -8,7 +8,7 @@
       <!-- Render songData details using SongDetails component -->
       <SongDetails :songData="songData" />
       <!-- Render charts using ChartList component -->
-      <ChartList :charts="songData.charts" />
+      <ChartPreview :charts="songData.charts" />
     </div>
   </div>
 </template>
@@ -17,8 +17,7 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import SongDetails from './SongDetails.vue'
-import ChartRenderer from './ChartRenderer.vue'
-import ChartList from './ChartList.vue'
+import ChartPreview from './ChartPreview.vue'
 
 interface SongData {
   title: string
@@ -39,7 +38,7 @@ interface ChartData {
 export default defineComponent({
   components: {
     SongDetails,
-    ChartList
+    ChartPreview
   },
   data() {
     return {
@@ -78,6 +77,11 @@ export default defineComponent({
         // Handle error state or notify the user
       } finally {
         this.isLoading = false
+        const serializedChartsData = JSON.stringify(this.songData.charts)
+        this.$router.push({
+          name: 'preview',
+          params: { songData: this.songData, chartData: this.songData.charts }
+        })
         console.log(this.songData.charts)
       }
     }

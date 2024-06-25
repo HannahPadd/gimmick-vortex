@@ -1,7 +1,7 @@
 <template>
-  <div v-if="charts && charts.length > 0" class="chart-container">
-    <h3>Charts:</h3>
-    <div v-for="(chart, index) in charts" :key="index" class="chart">
+  <div v-if="chartData && chartData.length > 0" class="chart-container">
+    <h3>chartData:</h3>
+    <div v-for="(chart, index) in chartData" :key="index" class="chart">
       <h4>Chart Type: {{ chart.type }}</h4>
       <h4>Difficulty: {{ chart.difficultyNumber }} {{ chart.difficulty }}</h4>
       <div class="measures-container">
@@ -30,7 +30,7 @@
       </div>
     </div>
   </div>
-  <div v-else>No charts available.</div>
+  <div v-else>No Charts available.</div>
 </template>
 
 <script lang="ts">
@@ -47,11 +47,10 @@ interface ChartData {
 }
 
 export default defineComponent({
-  name: 'ChartRenderer',
+  name: 'ChartPreview',
   props: {
-    charts: {
-      type: Array as PropType<ChartData[]>,
-      required: true
+    chartData: {
+      type: Array as PropType<ChartData[]>
     }
   },
   methods: {

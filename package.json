@@ -18,7 +18,8 @@
     "pixi.js": "^8.2.1",
     "vue": "^3.4.29",
     "vue-router": "next",
-    "vue-ts-types": "^1.6.2"
+    "vue-ts-types": "^1.6.2",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",
