@@ -1,17 +1,18 @@
 <template>
+  <NavBar />
   <div id="app">
-    <Home />
+    <RouterView />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Home from '@/views/HomeItem.vue'
+import NavBar from '@/components/NavBar.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
-    Home
+    NavBar
   }
 })
 </script>

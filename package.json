@@ -17,6 +17,7 @@
     "axios": "^1.7.2",
     "pixi.js": "^8.2.1",
     "vue": "^3.4.29",
+    "vue-router": "next",
     "vue-ts-types": "^1.6.2"
   },
   "devDependencies": {

@@ -1158,6 +1158,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vue/devtools-api@npm:^6.0.0":
+  version: 6.6.3
+  resolution: "@vue/devtools-api@npm:6.6.3"
+  checksum: 4dc7e980bc50557b128655ca447d2f10ccda896a88d0560eec2c391a8b97ddb63547d79d30d76a6e9e2ec5368ee73c4a66bc44367cc607c0262c328fe648de8a
+  languageName: node
+  linkType: hard
+
 "@vue/eslint-config-prettier@npm:^9.0.0":
   version: 9.0.0
   resolution: "@vue/eslint-config-prettier@npm:9.0.0"
@@ -2224,6 +2231,7 @@ __metadata:
     typescript: ~5.4.0
     vite: ^5.3.1
     vue: ^3.4.29
+    vue-router: next
     vue-ts-types: ^1.6.2
     vue-tsc: ^2.0.21
   languageName: unknown
@@ -3706,6 +3714,17 @@ __metadata:
   peerDependencies:
     eslint: ">=6.0.0"
   checksum: 8d5b7ef7c5ee264ca2ba78da4b95ac7a66175a458d153a35e92cd7c55b794db0f2c31a8fdd40021bab4496f2f64ab80d7dbb6dccff4103beb4564c439a88fa42
+  languageName: node
+  linkType: hard
+
+"vue-router@npm:next":
+  version: 4.0.13
+  resolution: "vue-router@npm:4.0.13"
+  dependencies:
+    "@vue/devtools-api": ^6.0.0
+  peerDependencies:
+    vue: ^3.2.0
+  checksum: c1a4345e05af7e45d4808b89a92c6083891383759bba5f27a0e63840b19dbb4743fdaada48191445c652d6194792563dc76edf85557ae612a4908befa9148a57
   languageName: node
   linkType: hard
 

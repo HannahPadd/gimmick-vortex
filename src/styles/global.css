@@ -74,9 +74,3 @@ body {
 .top-bar .navigation a:hover {
   color: #f5c2e7; /* Hover color */
 }
-
-/* Main content area */
-.main-content {
-  padding-top: 60px; /* Adjust to match top bar height */
-  padding: 20px;
-}

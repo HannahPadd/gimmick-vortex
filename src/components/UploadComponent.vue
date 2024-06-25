@@ -17,6 +17,7 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import SongDetails from './SongDetails.vue'
+import ChartRenderer from './ChartRenderer.vue'
 import ChartList from './ChartList.vue'
 
 interface SongData {

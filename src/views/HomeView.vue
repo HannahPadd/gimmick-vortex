@@ -1,6 +1,8 @@
 <template>
-  <NavBar />
-
+  <div class="home">
+    <h2>Welcome to Gimmick Vortex!</h2>
+    <p>You can either upload a stepfile and start editing it or create a new one</p>
+  </div>
   <div class="content">
     <UploadComponent />
     <ChartRenderer />
@@ -9,19 +11,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import NavBar from '@/components/NavBar.vue'
 import UploadComponent from '@/components/UploadComponent.vue'
 import ChartRenderer from '@/components/ChartRenderer.vue'
 
 export default defineComponent({
   components: {
-    NavBar,
     ChartRenderer,
     UploadComponent
   }
 })
 </script>
 
-<style scoped>
-/* Add your styles here */
-</style>
+<style scoped></style>
