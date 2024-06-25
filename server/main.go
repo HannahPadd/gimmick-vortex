@@ -70,9 +70,6 @@ func uploadFileHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Difficulty: %s\n", chart.Difficulty)
 		fmt.Printf("Difficulty Tag: %s\n", chart.DifficultyTag)
 		fmt.Println("Notes:")
-		for _, noteGroup := range chart.Notes {
-			fmt.Printf("    %s\n", strings.Join(noteGroup, ", "))
-		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -86,11 +83,10 @@ func parseSMFile(data string) (*SongData, error) {
 	var notes []string
 	var metaFields []string
 	var inNotesSection bool
-
+	var currentHeader string
 	for scanner.Scan() {
 		line := scanner.Text()
 		line = strings.TrimSpace(line)
-
 		if strings.HasPrefix(line, "#TITLE:") {
 			songData.Title = strings.TrimSuffix(strings.TrimPrefix(line, "#TITLE:"), ";")
 		} else if strings.HasPrefix(line, "#ARTIST:") {
@@ -99,10 +95,11 @@ func parseSMFile(data string) (*SongData, error) {
 			songData.BPMS = strings.TrimSuffix(strings.TrimPrefix(line, "#BPMS:"), ";")
 		} else if strings.HasPrefix(line, "//---------------") {
 			// End of notes section for the previous chart
+			currentHeader = line
 			if len(notes) > 0 {
 				// Add the previous chart data to songData.Charts
 				songData.Charts = append(songData.Charts, ChartData{
-					ChartHeader:   line,
+					ChartHeader:   currentHeader,
 					Type:          currentType,
 					Tag:           currentTag,
 					Difficulty:    currentDifficulty,
@@ -113,6 +110,7 @@ func parseSMFile(data string) (*SongData, error) {
 				inNotesSection = false
 			}
 		} else if strings.HasPrefix(line, "#NOTES:") {
+			metaFields = []string{}
 			inNotesSection = true
 			for i := 0; i < 5; i++ {
 				scanner.Scan()
@@ -132,7 +130,7 @@ func parseSMFile(data string) (*SongData, error) {
 	// Append the last chart if there are remaining notes
 	if len(notes) > 0 {
 		songData.Charts = append(songData.Charts, ChartData{
-			ChartHeader:   "//---------------",
+			ChartHeader:   currentHeader,
 			Type:          currentType,
 			Tag:           currentTag,
 			Difficulty:    currentDifficulty,
