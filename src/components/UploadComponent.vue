@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>StepMania .sm File Viewer</h1>
     <input type="file" @change="handleFileChange" />
     <button @click="handleFileUpload">Upload</button>
 

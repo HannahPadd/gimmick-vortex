@@ -1,4 +1,5 @@
 <template>
+  <h1>Gimmick Vortex</h1>
   <div>
     <UploadComponent />
   </div>
