@@ -4,8 +4,9 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -38,14 +39,14 @@ func uploadFileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	tempFile, err := ioutil.TempFile("uploads", "upload-*.sm")
+	tempFile, err := os.CreateTemp("uploads", "upload-*.sm")
 	if err != nil {
 		http.Error(w, "Error creating temporary file", http.StatusInternalServerError)
 		return
 	}
 	defer tempFile.Close()
 
-	fileBytes, err := ioutil.ReadAll(file)
+	fileBytes, err := io.ReadAll(file)
 	if err != nil {
 		http.Error(w, "Error reading the file", http.StatusInternalServerError)
 		return
@@ -82,57 +83,62 @@ func parseSMFile(data string) (*SongData, error) {
 	scanner := bufio.NewScanner(strings.NewReader(data))
 	songData := &SongData{}
 	var currentType, currentTag, currentDifficulty, currentDifficultyTag string
-	var notes [][]string
+	var notes []string
+	var inNotesSection bool
 
 	for scanner.Scan() {
 		line := scanner.Text()
+		line = strings.TrimSpace(line)
 
 		if strings.HasPrefix(line, "#TITLE:") {
-			songData.Title = strings.TrimSpace(strings.TrimPrefix(line, "#TITLE:"))
+			songData.Title = strings.TrimSuffix(strings.TrimPrefix(line, "#TITLE:"), ";")
 		} else if strings.HasPrefix(line, "#ARTIST:") {
-			songData.Artist = strings.TrimSpace(strings.TrimPrefix(line, "#ARTIST:"))
+			songData.Artist = strings.TrimSuffix(strings.TrimPrefix(line, "#ARTIST:"), ";")
 		} else if strings.HasPrefix(line, "#BPMS:") {
-			songData.BPMS = strings.TrimSpace(strings.TrimPrefix(line, "#BPMS:"))
-		} else if strings.HasPrefix(line, "#NOTES:") {
+			songData.BPMS = strings.TrimSuffix(strings.TrimPrefix(line, "#BPMS:"), ";")
+		} else if strings.HasPrefix(line, "//---------------") {
+			// End of notes section for the previous chart
 			if len(notes) > 0 {
+				// Add the previous chart data to songData.Charts
 				songData.Charts = append(songData.Charts, ChartData{
+					ChartHeader:   line,
 					Type:          currentType,
 					Tag:           currentTag,
 					Difficulty:    currentDifficulty,
 					DifficultyTag: currentDifficultyTag,
-					Notes:         notes,
+					Notes:         convertNotesTo2DArray(notes),
 				})
-				notes = [][]string{} // Reset notes for the next chart
+				notes = []string{} // Reset notes for the next chart
+				inNotesSection = false
 			}
+		} else if strings.HasPrefix(line, "#NOTES:") {
+			inNotesSection = true
 
-			// Parse metadata from #NOTES line
-			fields := strings.SplitN(line, ":", 2)
-			if len(fields) == 2 {
-				metaData := strings.TrimSpace(fields[1])
-				metaFields := strings.Split(metaData, ":")
-
-				if len(metaFields) >= 4 {
-					currentType = strings.TrimSpace(metaFields[0])
-					currentTag = strings.TrimSpace(metaFields[1])
-					currentDifficulty = strings.TrimSpace(metaFields[2])
-					currentDifficultyTag = strings.TrimSpace(metaFields[3])
-				}
+			// Split the line by colon to get the metadata section
+			metaData := strings.TrimPrefix(line, "#NOTES:")
+			metaFields := strings.Split(metaData, ":")
+			fmt.Printf("metaFields: %v\n", metaFields)
+			if len(metaFields) >= 5 {
+				currentType = strings.TrimSpace(metaFields[0])
+				currentTag = strings.TrimSpace(metaFields[1])
+				currentDifficulty = strings.TrimSpace(metaFields[2])
+				currentDifficultyTag = strings.TrimSpace(metaFields[3])
 			}
-		} else if strings.HasPrefix(line, ",") {
-			// Parse note lines
-			noteGroup := strings.Split(strings.TrimSpace(line), ",")
-			notes = append(notes, noteGroup)
+		} else if inNotesSection && line != ";" {
+			// Collect notes lines until encountering ";" or "//---------------"
+			notes = append(notes, line)
 		}
 	}
 
-	// Append the last chart
+	// Append the last chart if there are remaining notes
 	if len(notes) > 0 {
 		songData.Charts = append(songData.Charts, ChartData{
+			ChartHeader:   "//---------------",
 			Type:          currentType,
 			Tag:           currentTag,
 			Difficulty:    currentDifficulty,
 			DifficultyTag: currentDifficultyTag,
-			Notes:         notes,
+			Notes:         convertNotesTo2DArray(notes),
 		})
 	}
 
