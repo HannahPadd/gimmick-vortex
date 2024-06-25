@@ -77,6 +77,7 @@ export default defineComponent({
         // Handle error state or notify the user
       } finally {
         this.isLoading = false
+        console.log(this.songData.charts)
       }
     }
   }
