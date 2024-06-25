@@ -1,68 +1,85 @@
 <template>
-    <div>
-      <h1>StepMania .sm File Viewer</h1>
-      <input type="file" @change="handleFileChange" />
-      <button @click="handleFileUpload">Upload</button>
-      <div v-if="songData">
-        <h2>{{ songData.title }} by {{ songData.artist }}</h2>
-        <p><strong>BPMS:</strong> {{ songData.bpms }}</p>
-        <div>
-          <h3>Notes</h3>
-          <div v-for="(note, index) in songData.notes" :key="index">
-            <pre>{{ note }}</pre>
-          </div>
-        </div>
-      </div>
+  <div>
+    <h1>StepMania .sm File Viewer</h1>
+    <input type="file" @change="handleFileChange" />
+    <button @click="handleFileUpload">Upload</button>
+
+    <div v-if="isLoading">Loading...</div>
+    <div v-else-if="songData">
+      <!-- Render songData details using SongDetails component -->
+      <SongDetails :songData="songData" />
+      <!-- Render charts using ChartList component -->
+      <ChartList :charts="songData.charts" />
     </div>
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent } from 'vue';
-  import axios from 'axios';
-  
-  interface SongData {
-    title: string;
-    artist: string;
-    bpms: string;
-    notes: string[];
-  }
-  
-  export default defineComponent({
-    data() {
-      return {
-        file: null as File | null,
-        songData: null as SongData | null
-      };
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+import axios from 'axios'
+import SongDetails from './SongDetails.vue'
+import ChartList from './ChartList.vue'
+
+interface SongData {
+  title: string
+  artist: string
+  bpms: string
+  charts: ChartData[]
+}
+
+interface ChartData {
+  chartHeader: string
+  type: string
+  tag: string
+  difficultyTag: string
+  difficulty: string
+  notes: string[][]
+}
+
+export default defineComponent({
+  components: {
+    SongDetails,
+    ChartList
+  },
+  data() {
+    return {
+      file: null as File | null,
+      isLoading: false,
+      songData: {} as SongData,
+      chartsData: [] as ChartData[]
+    }
+  },
+  methods: {
+    handleFileChange(event: Event) {
+      const target = event.target as HTMLInputElement
+      if (target.files && target.files.length > 0) {
+        this.file = target.files[0]
+      }
     },
-    methods: {
-      handleFileChange(event: Event) {
-        const target = event.target as HTMLInputElement;
-        if (target.files && target.files.length > 0) {
-          this.file = target.files[0];
-        }
-      },
-      async handleFileUpload() {
-        if (!this.file) return;
-  
-        const formData = new FormData();
-        formData.append('file', this.file);
-  
-        try {
-          const response = await axios.post<SongData>('http://localhost:5000/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-          this.songData = response.data;
-        } catch (error) {
-          console.error('Error uploading file:', error);
-        }
+    async handleFileUpload() {
+      if (!this.file) {
+        return
+      }
+      try {
+        this.isLoading = true
+        const formData = new FormData()
+        formData.append('file', this.file.slice(), this.file.name)
+
+        const response = await axios.post<SongData>('http://localhost:5000/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+
+        // Update songData only if response is successful
+        this.songData = response.data
+      } catch (error) {
+        console.error('Error uploading file:', error)
+        // Handle error state or notify the user
+      } finally {
+        this.isLoading = false
       }
     }
-  });
-  </script>
-  
-  <style scoped>
-  /* Add your styles here */
-  </style>
-  
+  }
+})
+</script>
