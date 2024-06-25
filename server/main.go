@@ -84,6 +84,7 @@ func parseSMFile(data string) (*SongData, error) {
 	songData := &SongData{}
 	var currentType, currentTag, currentDifficulty, currentDifficultyTag string
 	var notes []string
+	var metaFields []string
 	var inNotesSection bool
 
 	for scanner.Scan() {
@@ -113,11 +114,10 @@ func parseSMFile(data string) (*SongData, error) {
 			}
 		} else if strings.HasPrefix(line, "#NOTES:") {
 			inNotesSection = true
-
-			// Split the line by colon to get the metadata section
-			metaData := strings.TrimPrefix(line, "#NOTES:")
-			metaFields := strings.Split(metaData, ":")
-			fmt.Printf("metaFields: %v\n", metaFields)
+			for i := 0; i < 5; i++ {
+				scanner.Scan()
+				metaFields = append(metaFields, scanner.Text())
+			}
 			if len(metaFields) >= 5 {
 				currentType = strings.TrimSpace(metaFields[0])
 				currentTag = strings.TrimSpace(metaFields[1])
@@ -125,7 +125,6 @@ func parseSMFile(data string) (*SongData, error) {
 				currentDifficultyTag = strings.TrimSpace(metaFields[3])
 			}
 		} else if inNotesSection && line != ";" {
-			// Collect notes lines until encountering ";" or "//---------------"
 			notes = append(notes, line)
 		}
 	}
