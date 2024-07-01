@@ -21,9 +21,24 @@ class StepEngine {
   }
 
   async init() {
+    let y = 0
     await this.app.init({ background: '#1099bb', resizeTo: window })
 
     document.body.appendChild(this.app.canvas)
+
+    this.app.canvas.addEventListener('wheel', (e) => {
+      y += e.deltaY
+    })
+
+    this.app.ticker.add(() => {
+      const screenWidth = this.app.renderer.width
+      const screenHeight = this.app.renderer.height
+
+      const targetY = y / screenHeight
+
+      this.noteHighwayContainer.y += -targetY * 10
+      console.log(this.noteHighwayContainer.y)
+    })
 
     await Assets.init({ manifest: 'src/engine/assets/manifest.json' })
     Assets.backgroundLoadBundle(['note-highway'])
@@ -31,7 +46,13 @@ class StepEngine {
   }
 
   async CreateHighway() {
+    const SCREEN_CENTERX = this.app.screen.width / 2
+    const SCREEN_CENTERY = this.app.screen.height / 2
     const NOTE_SIZE = 128
+    const NOTE_SPACINGX = 64
+    const TOTALWIDTH = NOTE_SIZE * 4 + NOTE_SPACINGX * 3
+    const STARTX = SCREEN_CENTERX - TOTALWIDTH / 2
+    const STARTY = 0
     const noteHighwayAssets = await Assets.loadBundle('note-highway')
     const noteSprites = [
       new Sprite(noteHighwayAssets.left_arrow),
@@ -42,7 +63,7 @@ class StepEngine {
       new Sprite(noteHighwayAssets.roll),
       new Sprite(noteHighwayAssets.hold)
     ]
-    const noteContainerArray = []
+
     console.log(this.testNotes)
     this.noteArray = this.testNotes
 
@@ -52,76 +73,80 @@ class StepEngine {
     for (let i = 0; i < this.noteArray.length; i++) {
       console.log(this.noteArray[i])
       for (let j = 0; j < this.noteArray[i].length; j++) {
-        if (this.noteArray[i][j] == '\n') {
-          direction = 0
-          continue
-        }
-        console.log(this.noteArray[i][j])
-        direction += 1
-        if (this.noteArray[i][j] !== '0') {
-          position >= 3 ? (position = 0) : position++
-          console.log('position: ' + position + ' note: ' + this.noteArray[i][j].toString())
-          switch (this.noteArray[i][j]) {
-            //Tap Note
-            case '1': {
-              if (position == 0) {
-                noteSprites[0].anchor.set(0.5)
-                noteSprites[0].x = this.app.screen.width / 2
-                noteSprites[0].y = this.app.screen.height / 2
-                console.log('position 0')
-                this.noteHighwayContainer.addChild(noteSprites[0])
-              }
-              if (position == 1) {
-                noteSprites[1].anchor.set(0.5)
-                noteSprites[1].x = this.app.screen.width / 2
-                noteSprites[1].y = this.app.screen.height / 2
-                console.log('position 1')
-                this.notesContainer.addChild(noteSprites[1])
-              }
-              if (position == 2) {
-                noteSprites[2].anchor.set(0.5)
-                noteSprites[2].x = this.app.screen.width / 2
-                noteSprites[3].y = this.app.screen.height / 2
-                console.log('position 2')
-                this.noteHighwayContainer.addChild(noteSprites[2])
-              }
-              if (position == 3) {
-                noteSprites[3].anchor.set(0.5)
-                noteSprites[3].x = this.app.screen.width / 2
-                noteSprites[3].y = this.app.screen.height / 2
-                console.log('position 3')
-                this.noteHighwayContainer.addChild(noteSprites[3])
-              }
-              break
+        const noteContainer = new Container()
+        this.noteHighwayContainer.addChild(noteContainer)
+        this.noteArray[i][j] === '\n' ? position++ : position
+        console.log(
+          'position: ' +
+            position +
+            ' notePosition: ' +
+            j +
+            ' noteType: ' +
+            this.noteArray[i][j] +
+            ' direction: ' +
+            direction.toString()
+        )
+        direction >= 3 ? (direction = 0) : direction++
+        switch (this.noteArray[i][j]) {
+          //Tap Note
+          case '1': {
+            if (direction == 0) {
+              noteSprites[0].anchor.set(0.5)
+              noteSprites[0].x = STARTX
+              noteSprites[0].y = STARTY + position * 20
+              console.log('x: ' + noteSprites[0].x + ', y: ' + noteSprites[0].y)
+              noteContainer.addChild(noteSprites[0])
             }
-            //Hold Head
-            case '2': {
-              break
+            if (direction == 1) {
+              noteSprites[1].anchor.set(0.5)
+              noteSprites[1].x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
+              noteSprites[1].y = STARTY + position * 20
+              console.log('x: ' + noteSprites[1].x + ', y: ' + noteSprites[1].y)
+              noteContainer.addChild(noteSprites[1])
             }
-            //Hold/Roll End
-            case '3': {
-              break
+            if (direction == 2) {
+              noteSprites[2].anchor.set(0.5)
+              noteSprites[2].x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
+              noteSprites[2].y = STARTY + position * 20
+              console.log('x: ' + noteSprites[2].x + ', y: ' + noteSprites[2].y)
+              noteContainer.addChild(noteSprites[2])
             }
-            //Roll Head
-            case '4': {
-              break
+            if (direction == 3) {
+              noteSprites[3].anchor.set(0.5)
+              noteSprites[3].x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
+              noteSprites[3].y = STARTY + position * 20
+              console.log('x: ' + noteSprites[3].x + ', y: ' + noteSprites[3].y)
+              noteContainer.addChild(noteSprites[3])
             }
-            //Mine
-            case 'M': {
-              break
-            }
-            //Lift
-            case 'L': {
-              break
-            }
-            //Fake (unused)
-            case 'F': {
-              break
-            }
-            //AutoKeysound (mostly unused)
-            case 'K': {
-              break
-            }
+            break
+          }
+          //Hold Head
+          case '2': {
+            break
+          }
+          //Hold/Roll End
+          case '3': {
+            break
+          }
+          //Roll Head
+          case '4': {
+            break
+          }
+          //Mine
+          case 'M': {
+            break
+          }
+          //Lift
+          case 'L': {
+            break
+          }
+          //Fake (unused)
+          case 'F': {
+            break
+          }
+          //AutoKeysound (mostly unused)
+          case 'K': {
+            break
           }
         }
       }
