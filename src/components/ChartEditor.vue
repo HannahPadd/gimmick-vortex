@@ -5,32 +5,12 @@
 </template>
 
 <script lang="ts">
-import { initializePixi } from '@/engine/view.ts'
-export default {
-  name: 'ChartEditor',
-  props: {
-    chartData: {
-      type: Array as () => string[][],
-      required: true
-    }
-  },
-  setup(props) {
-    const pixiContainer = ref<HTMLDivElement | null>(null)
-    let app: PIXI.Application | null = null
+import { StepEngine } from '@/engine/StepEngine'
+import { defineComponent } from 'vue'
+const stepEngine = new StepEngine([])
+stepEngine.init()
 
-    onMounted(() => {
-      if (pixiContainer.value) {
-        // Call initializePixi function with options
-        app = initializePixi({
-          container: pixiContainer.value,
-          chartData: props.chartData
-        })
-      }
-    })
-
-    return {
-      pixiContainer
-    }
-  }
-}
+export default defineComponent({
+  name: 'ChartEditor'
+})
 </script>

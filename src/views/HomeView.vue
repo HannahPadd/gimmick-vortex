@@ -4,19 +4,17 @@
     <p>You can either upload a stepfile and start editing it or create a new one</p>
   </div>
   <div class="content">
-    <UploadComponent />
+    <ChartEditor />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import UploadComponent from '@/components/UploadComponent.vue'
-import ChartRenderer from '@/components/ChartRenderer.vue'
+import ChartEditor from '@/components/ChartEditor.vue'
 
 export default defineComponent({
   components: {
-    ChartRenderer,
-    UploadComponent
+    ChartEditor
   }
 })
 </script>

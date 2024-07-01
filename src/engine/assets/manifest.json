@@ -1,0 +1,41 @@
+{
+  "bundles": [
+    {
+      "name": "note-highway",
+      "assets": [
+        {
+          "alias": "background",
+          "src": "background.png"
+        },
+        {
+          "alias": "left-arrow",
+          "src": "left-arrow.png"
+        },
+        {
+          "alias": "up-arrow",
+          "src": "up-arrow.png"
+        },
+        {
+          "alias": "down-arrow",
+          "src": "down-arrow.png"
+        },
+        {
+          "alias": "right-arrow",
+          "src": "right-arrow.png"
+        },
+        {
+          "alias": "mine",
+          "src": "mine.png"
+        },
+        {
+          "alias": "roll",
+          "src": "roll.png"
+        },
+        {
+          "alias": "hold",
+          "src": "hold.png"
+        }
+      ]
+    }
+  ]
+}
