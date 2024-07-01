@@ -16,7 +16,8 @@ class StepEngine {
       '0000\n0000\n0000\n0000\n',
       '1000\n0100\n0010\n0001\n',
       '0001\n0010\n0100\n1000\n1000\n0100\n0010\n0001\n',
-      '1000\n0100\n0010\n0001\n'
+      '1000\n0100\n0010\n0001\n',
+      '0001\n0100\n0001\n0100\n'
     ]
   }
 
@@ -28,6 +29,9 @@ class StepEngine {
 
     this.app.canvas.addEventListener('wheel', (e) => {
       y += e.deltaY
+    })
+    this.app.canvas.addEventListener('Keydown', (e) => {
+      console.log(e)
     })
 
     this.app.ticker.add(() => {
