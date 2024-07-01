@@ -55,120 +55,72 @@ class StepEngine {
     const STARTX = SCREEN_CENTERX - TOTALWIDTH / 2
     const STARTY = 200
     const noteHighwayAssets = await Assets.loadBundle('note-highway')
-    const noteSprites = [
-      new Sprite(noteHighwayAssets.left_arrow),
-      new Sprite(noteHighwayAssets.up_arrow),
-      new Sprite(noteHighwayAssets.down_arrow),
-      new Sprite(noteHighwayAssets.right_arrow),
-      new Sprite(noteHighwayAssets.mine),
-      new Sprite(noteHighwayAssets.roll),
-      new Sprite(noteHighwayAssets.hold)
-    ]
-
-    console.log(this.testNotes)
     this.noteArray = this.testNotes
 
     let position = 0
-    const measureLength = 0
     for (let i = 0; i < this.noteArray.length; i++) {
-      console.log(this.noteArray[i])
-      for (let j = 0; j < this.noteArray[i].length; j++) {
-        /** 
-        const noteContainer = new Container()
-        this.noteHighwayContainer.addChild(noteContainer)
-        this.noteArray[i][j] === '\n' ? position++ : position
-        */
-        const noteContainer = new Container()
-        this.noteHighwayContainer.addChild(noteContainer)
+      const lines = this.noteArray[i].split('\n')
+      for (let j = 0; j < lines.length; j++) {
+        const line = lines[j]
+        if (line.trim() === '') continue // Skip empty lines
 
-        const direction = j % 4
-        let noteSprite: Sprite | undefined
-        console.log(
-          'position: ' +
-            position +
-            ' notePosition: ' +
-            j +
-            ' noteType: ' +
-            this.noteArray[i][j] +
-            ' direction: ' +
-            direction.toString()
-        )
-        switch (this.noteArray[i][j]) {
-          //Tap Note
-          case '1': {
-            /** 
-            if (direction == 0) {
-              noteSprites[0].anchor.set(0.5)
-              noteSprites[0].x = STARTX
-              noteSprites[0].y = STARTY + position * 20
-              console.log('x: ' + noteSprites[0].x + ', y: ' + noteSprites[0].y)
-              noteContainer.addChild(noteSprites[0])
+        for (let k = 0; k < line.length; k++) {
+          const noteType = line[k]
+          const noteContainer = new Container()
+          this.noteHighwayContainer.addChild(noteContainer)
+
+          const direction = k % 4
+          let noteSprite: Sprite | undefined
+
+          switch (noteType) {
+            // Tap Note
+            case '1': {
+              noteSprite = new Sprite(
+                noteHighwayAssets[
+                  ['left_arrow', 'up_arrow', 'down_arrow', 'right_arrow'][direction]
+                ]
+              )
+              noteSprite.anchor.set(0.5)
+              noteSprite.x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
+              noteSprite.y = STARTY + position * NOTE_SPACINGY
+              console.log(`x: ${noteSprite.x}, y: ${noteSprite.y}`)
+              noteContainer.addChild(noteSprite)
+              break
             }
-            if (direction == 1) {
-              noteSprites[1].anchor.set(0.5)
-              noteSprites[1].x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
-              noteSprites[1].y = STARTY + position * 20
-              console.log('x: ' + noteSprites[1].x + ', y: ' + noteSprites[1].y)
-              noteContainer.addChild(noteSprites[1])
+            //Hold Head
+            case '2': {
+              break
             }
-            if (direction == 2) {
-              noteSprites[2].anchor.set(0.5)
-              noteSprites[2].x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
-              noteSprites[2].y = STARTY + position * 20
-              console.log('x: ' + noteSprites[2].x + ', y: ' + noteSprites[2].y)
-              noteContainer.addChild(noteSprites[2])
+            //Hold/Roll End
+            case '3': {
+              break
             }
-            if (direction == 3) {
-              noteSprites[3].anchor.set(0.5)
-              noteSprites[3].x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
-              noteSprites[3].y = STARTY + position * 20
-              console.log('x: ' + noteSprites[3].x + ', y: ' + noteSprites[3].y)
-              noteContainer.addChild(noteSprites[3])
+            //Roll Head
+            case '4': {
+              break
             }
-              */
-            noteSprite = new Sprite(
-              noteHighwayAssets[['left_arrow', 'up_arrow', 'down_arrow', 'right_arrow'][direction]]
-            )
-            noteSprite.anchor.set(0.5)
-            noteSprite.x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
-            noteSprite.y = STARTY + position * NOTE_SPACINGY
-            console.log(`x: ${noteSprite.x}, y: ${noteSprite.y}`)
-            noteContainer.addChild(noteSprite)
-            break
+            //Mine
+            case 'M': {
+              break
+            }
+            //Lift
+            case 'L': {
+              break
+            }
+            //Fake (unused)
+            case 'F': {
+              break
+            }
+            //AutoKeysound (mostly unused)
+            case 'K': {
+              break
+            }
           }
-          //Hold Head
-          case '2': {
-            break
-          }
-          //Hold/Roll End
-          case '3': {
-            break
-          }
-          //Roll Head
-          case '4': {
-            break
-          }
-          //Mine
-          case 'M': {
-            break
-          }
-          //Lift
-          case 'L': {
-            break
-          }
-          //Fake (unused)
-          case 'F': {
-            break
-          }
-          //AutoKeysound (mostly unused)
-          case 'K': {
-            break
-          }
+          position++
         }
-        position++
       }
+      this.app.stage.addChild(this.noteHighwayContainer)
     }
-    this.app.stage.addChild(this.noteHighwayContainer)
   }
 }
 
