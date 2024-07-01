@@ -50,9 +50,10 @@ class StepEngine {
     const SCREEN_CENTERY = this.app.screen.height / 2
     const NOTE_SIZE = 128
     const NOTE_SPACINGX = 64
+    const NOTE_SPACINGY = 64
     const TOTALWIDTH = NOTE_SIZE * 4 + NOTE_SPACINGX * 3
     const STARTX = SCREEN_CENTERX - TOTALWIDTH / 2
-    const STARTY = 0
+    const STARTY = 200
     const noteHighwayAssets = await Assets.loadBundle('note-highway')
     const noteSprites = [
       new Sprite(noteHighwayAssets.left_arrow),
@@ -67,15 +68,21 @@ class StepEngine {
     console.log(this.testNotes)
     this.noteArray = this.testNotes
 
-    let direction = 0
     let position = 0
     const measureLength = 0
     for (let i = 0; i < this.noteArray.length; i++) {
       console.log(this.noteArray[i])
       for (let j = 0; j < this.noteArray[i].length; j++) {
+        /** 
         const noteContainer = new Container()
         this.noteHighwayContainer.addChild(noteContainer)
         this.noteArray[i][j] === '\n' ? position++ : position
+        */
+        const noteContainer = new Container()
+        this.noteHighwayContainer.addChild(noteContainer)
+
+        const direction = j % 4
+        let noteSprite: Sprite | undefined
         console.log(
           'position: ' +
             position +
@@ -86,10 +93,10 @@ class StepEngine {
             ' direction: ' +
             direction.toString()
         )
-        direction >= 3 ? (direction = 0) : direction++
         switch (this.noteArray[i][j]) {
           //Tap Note
           case '1': {
+            /** 
             if (direction == 0) {
               noteSprites[0].anchor.set(0.5)
               noteSprites[0].x = STARTX
@@ -118,6 +125,15 @@ class StepEngine {
               console.log('x: ' + noteSprites[3].x + ', y: ' + noteSprites[3].y)
               noteContainer.addChild(noteSprites[3])
             }
+              */
+            noteSprite = new Sprite(
+              noteHighwayAssets[['left_arrow', 'up_arrow', 'down_arrow', 'right_arrow'][direction]]
+            )
+            noteSprite.anchor.set(0.5)
+            noteSprite.x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
+            noteSprite.y = STARTY + position * NOTE_SPACINGY
+            console.log(`x: ${noteSprite.x}, y: ${noteSprite.y}`)
+            noteContainer.addChild(noteSprite)
             break
           }
           //Hold Head
@@ -149,6 +165,7 @@ class StepEngine {
             break
           }
         }
+        position++
       }
     }
     this.app.stage.addChild(this.noteHighwayContainer)
