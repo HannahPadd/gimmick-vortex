@@ -5,35 +5,35 @@
       "assets": [
         {
           "alias": "background",
-          "src": "background.png"
+          "src": "src/engine/assets/img/background.png"
         },
         {
-          "alias": "left-arrow",
-          "src": "left-arrow.png"
+          "alias": "left_arrow",
+          "src": "src/engine/assets/img/left_arrow.png"
         },
         {
-          "alias": "up-arrow",
-          "src": "up-arrow.png"
+          "alias": "up_arrow",
+          "src": "src/engine/assets/img/up_arrow.png"
         },
         {
-          "alias": "down-arrow",
-          "src": "down-arrow.png"
+          "alias": "down_arrow",
+          "src": "src/engine/assets/img/down_arrow.png"
         },
         {
-          "alias": "right-arrow",
-          "src": "right-arrow.png"
+          "alias": "right_arrow",
+          "src": "src/engine/assets/img/right_arrow.png"
         },
         {
           "alias": "mine",
-          "src": "mine.png"
+          "src": "src/engine/assets/img/mine.png"
         },
         {
           "alias": "roll",
-          "src": "roll.png"
+          "src": "src/engine/assets/img/roll.png"
         },
         {
           "alias": "hold",
-          "src": "hold.png"
+          "src": "src/engine/assets/img/hold.png"
         }
       ]
     }
