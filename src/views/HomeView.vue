@@ -4,9 +4,6 @@
     <p>You can either upload a stepfile and start editing it or create a new one</p>
     <UploadComponent />
   </div>
-  <div class="editor">
-    <ChartEditor />
-  </div>
   <div class="upload"></div>
 </template>
 

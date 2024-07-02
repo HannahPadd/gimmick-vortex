@@ -8,8 +8,8 @@ class StepEngine {
   testNotes: string[]
   app = new Application()
 
-  constructor(noteArray: number[]) {
-    this.noteArray = []
+  constructor(noteArray: string[]) {
+    this.noteArray = noteArray
     this.noteHighwayContainer = new Container()
     this.notesContainer = new Container()
     this.testNotes = [

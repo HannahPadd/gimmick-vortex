@@ -7,9 +7,11 @@
     <div v-else-if="songData">
       <!-- Render songData details using SongDetails component -->
       <SongDetails :songData="songData" />
-      <!-- Render charts using ChartList component -->
-      <ChartPreview :charts="songData.charts" />
     </div>
+  </div>
+  <div class="editor">
+    <!-- Render ChartEditor and pass charts data -->
+    <ChartEditor :charts="songData.charts" />
   </div>
 </template>
 
@@ -17,7 +19,7 @@
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import SongDetails from './SongDetails.vue'
-import ChartPreview from './ChartPreview.vue'
+import ChartEditor from './ChartEditor.vue'
 
 interface SongData {
   title: string
@@ -38,7 +40,7 @@ interface ChartData {
 export default defineComponent({
   components: {
     SongDetails,
-    ChartPreview
+    ChartEditor
   },
   data() {
     return {

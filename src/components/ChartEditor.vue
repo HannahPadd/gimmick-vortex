@@ -11,6 +11,18 @@ const stepEngine = new StepEngine([])
 stepEngine.init()
 
 export default defineComponent({
-  name: 'ChartEditor'
+  name: 'ChartEditor',
+  props: {
+    charts: {
+      type: Array as PropType<ChartData[]>,
+      required: true
+    }
+  },
+  setup(props) {
+    onMounted(() => {
+      const stepEngine = new StepEngine(props.charts)
+      stepEngine.init()
+    })
+  }
 })
 </script>
