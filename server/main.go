@@ -26,7 +26,7 @@ type ChartData struct {
 	Tag           string     `json:"tag"`
 	Difficulty    string     `json:"difficulty"`
 	DifficultyNumber string     `json:"difficultyNumber"`
-	Notes         [][]string `json:"notes"`
+	Notes         []string `json:"notes"`
 }
 
 func uploadFileHandler(w http.ResponseWriter, r *http.Request) {
@@ -84,9 +84,11 @@ func parseSMFile(data string) (*SongData, error) {
 	var metaFields []string
 	var inNotesSection bool
 	var currentHeader string
+
 	for scanner.Scan() {
 		line := scanner.Text()
 		line = strings.TrimSpace(line)
+
 		if strings.HasPrefix(line, "#TITLE:") {
 			songData.Title = strings.TrimSuffix(strings.TrimPrefix(line, "#TITLE:"), ";")
 		} else if strings.HasPrefix(line, "#ARTIST:") {
@@ -99,12 +101,12 @@ func parseSMFile(data string) (*SongData, error) {
 			if len(notes) > 0 {
 				// Add the previous chart data to songData.Charts
 				songData.Charts = append(songData.Charts, ChartData{
-					ChartHeader:   currentHeader,
-					Type:          currentType,
-					Tag:           currentTag,
-					Difficulty:    currentDifficulty,
+					ChartHeader:     currentHeader,
+					Type:            currentType,
+					Tag:             currentTag,
+					Difficulty:      currentDifficulty,
 					DifficultyNumber: currentDifficultyNumber,
-					Notes:         convertNotesTo2DArray(notes),
+					Notes:           convertNotesToArrayString(notes),
 				})
 				notes = []string{} // Reset notes for the next chart
 				inNotesSection = false
@@ -122,20 +124,24 @@ func parseSMFile(data string) (*SongData, error) {
 				currentDifficulty = trimSuffixColon(metaFields[2])
 				currentDifficultyNumber = trimSuffixColon(metaFields[3])
 			}
-		} else if inNotesSection && line != ";" {
-			notes = append(notes, line)
+		} else if inNotesSection {
+			if line == ";" {
+				notes = append(notes, ",")
+			} else {
+				notes = append(notes, line)
+			}
 		}
 	}
 
 	// Append the last chart if there are remaining notes
 	if len(notes) > 0 {
 		songData.Charts = append(songData.Charts, ChartData{
-			ChartHeader:   currentHeader,
-			Type:          currentType,
-			Tag:           currentTag,
-			Difficulty:    currentDifficulty,
+			ChartHeader:     currentHeader,
+			Type:            currentType,
+			Tag:             currentTag,
+			Difficulty:      currentDifficulty,
 			DifficultyNumber: currentDifficultyNumber,
-			Notes:         convertNotesTo2DArray(notes),
+			Notes:           convertNotesToArrayString(notes),
 		})
 	}
 
@@ -146,14 +152,31 @@ func parseSMFile(data string) (*SongData, error) {
 	return songData, nil
 }
 
+
 // convertNotesTo2DArray converts a slice of note lines into a 2D array of strings
-func convertNotesTo2DArray(notes []string) [][]string {
-	result := make([][]string, len(notes))
-	for i, note := range notes {
-		result[i] = []string{note}
+// convertNotesToArrayString converts a slice of note lines into a slice of single string note blocks
+func convertNotesToArrayString(notes []string) []string {
+	var result []string
+	var currentBlock []string
+
+	for _, note := range notes {
+		if note == "," {
+			if len(currentBlock) > 0 {
+				result = append(result, strings.Join(currentBlock, "\n") + "\n")
+				currentBlock = []string{}
+			}
+		} else {
+			currentBlock = append(currentBlock, note)
+		}
 	}
+
+	if len(currentBlock) > 0 {
+		result = append(result, strings.Join(currentBlock, "\n") + "\n")
+	}
+
 	return result
 }
+
 
 func trimSuffixColon(s string) string {
 	return strings.TrimSuffix(strings.TrimSpace(s), ":")

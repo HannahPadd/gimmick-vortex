@@ -6,7 +6,16 @@
 
 <script lang="ts">
 import { StepEngine } from '@/engine/StepEngine'
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted, PropType, toRaw } from 'vue'
+
+interface ChartData {
+  chartHeader: string
+  type: string
+  tag: string
+  difficultyNumber: string
+  difficulty: string
+  notes: string[][]
+}
 
 export default defineComponent({
   name: 'ChartEditor',
@@ -18,8 +27,15 @@ export default defineComponent({
   },
   setup(props) {
     onMounted(() => {
-      const stepEngine = new StepEngine(props.charts)
-      stepEngine.init()
+      if (props.charts && Array.isArray(props.charts)) {
+        // Extract only the notes from each chart
+        const notes = JSON.parse(JSON.stringify(props.charts.map((chart) => chart.notes)))
+        console.log('Notes:', notes)
+        const stepEngine = new StepEngine(notes[0])
+        stepEngine.init()
+      } else {
+        console.error('Charts prop is undefined or not an array:', props.charts)
+      }
     })
   }
 })

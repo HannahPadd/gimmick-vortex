@@ -9,7 +9,7 @@
       <SongDetails :songData="songData" />
     </div>
   </div>
-  <div class="editor">
+  <div v-if="!isLoading" class="editor">
     <!-- Render ChartEditor and pass charts data -->
     <ChartEditor :charts="songData.charts" />
   </div>
@@ -79,11 +79,6 @@ export default defineComponent({
         // Handle error state or notify the user
       } finally {
         this.isLoading = false
-        const serializedChartsData = JSON.stringify(this.songData.charts)
-        this.$router.push({
-          name: 'preview',
-          params: { songData: this.songData, chartData: this.songData.charts }
-        })
         console.log(this.songData.charts)
       }
     }

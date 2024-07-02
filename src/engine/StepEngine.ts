@@ -5,20 +5,12 @@ class StepEngine {
   noteArray: string[]
   noteHighwayContainer: Container
   notesContainer: Container
-  testNotes: string[]
   app = new Application()
 
-  constructor(noteArray: string[]) {
-    this.noteArray = noteArray
+  constructor(NoteArray: string[]) {
+    this.noteArray = NoteArray
     this.noteHighwayContainer = new Container()
     this.notesContainer = new Container()
-    this.testNotes = [
-      '0000\n0000\n0000\n0000\n',
-      '1000\n0100\n0010\n0001\n',
-      '0001\n0010\n0100\n1000\n1000\n0100\n0010\n0001\n',
-      '1000\n0100\n0010\n0001\n',
-      '0001\n0100\n0001\n0100\n'
-    ]
   }
 
   async init() {
@@ -59,7 +51,6 @@ class StepEngine {
     const STARTX = SCREEN_CENTERX - TOTALWIDTH / 2
     const STARTY = 200
     const noteHighwayAssets = await Assets.loadBundle('note-highway')
-    this.noteArray = this.testNotes
 
     let position = 0
     for (let i = 0; i < this.noteArray.length; i++) {
