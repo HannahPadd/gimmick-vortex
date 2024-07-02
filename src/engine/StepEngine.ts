@@ -15,7 +15,7 @@ class StepEngine {
 
   async init() {
     let y = 0
-    await this.app.init({ background: '#1099bb', resizeTo: window })
+    await this.app.init({ background: '#1e1e2e', resizeTo: window })
 
     document.body.appendChild(this.app.canvas)
 
@@ -96,6 +96,14 @@ class StepEngine {
             }
             //Mine
             case 'M': {
+              noteSprite = new Sprite(
+                noteHighwayAssets[['mine', 'mine', 'mine', 'mine'][direction]]
+              )
+              noteSprite.anchor.set(0.5)
+              noteSprite.x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
+              noteSprite.y = STARTY + position * NOTE_SPACINGY
+              console.log(`x: ${noteSprite.x}, y: ${noteSprite.y}`)
+              noteContainer.addChild(noteSprite)
               break
             }
             //Lift
