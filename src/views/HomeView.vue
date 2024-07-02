@@ -2,9 +2,10 @@
   <div class="home">
     <h2>Welcome to Gimmick Vortex!</h2>
     <p>You can either upload a stepfile and start editing it or create a new one</p>
+  </div>
+  <div class="upload">
     <UploadComponent />
   </div>
-  <div class="upload"></div>
 </template>
 
 <script lang="ts">

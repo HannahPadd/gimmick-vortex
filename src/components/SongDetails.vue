@@ -2,7 +2,6 @@
   <div class="songdetails-container">
     <h2>Songname: {{ songData.title }}</h2>
     <p>Artist: {{ songData.artist }}</p>
-    <p>BPMS: {{ songData.bpms }}</p>
   </div>
 </template>
 

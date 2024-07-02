@@ -19,7 +19,7 @@ export default defineComponent({
   background-color: #22212c; /* Background color */
   padding: 10px 20px;
   display: flex;
-  align-items: center;
+  align-items: left;
   justify-content: space-between;
   width: 100%; /* Full width */
   position: fixed;

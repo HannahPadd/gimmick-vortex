@@ -1,4 +1,4 @@
-import { Application, Assets, Container, Sprite } from 'pixi.js'
+import { Application, Assets, Container, Sprite, Graphics } from 'pixi.js'
 
 class StepEngine {
   assets: any
@@ -33,7 +33,6 @@ class StepEngine {
       const targetY = y / screenHeight
 
       this.noteHighwayContainer.y += -targetY * 10
-      console.log(this.noteHighwayContainer.y)
     })
 
     await Assets.init({ manifest: 'src/engine/assets/manifest.json' })
@@ -44,20 +43,33 @@ class StepEngine {
   async CreateHighway() {
     const SCREEN_CENTERX = this.app.screen.width / 2
     const SCREEN_CENTERY = this.app.screen.height / 2
-    const NOTE_SIZE = 128
+    const NOTE_SIZE = 64
     const NOTE_SPACINGX = 64
-    const NOTE_SPACINGY = 64
+    const NOTE_SPACINGY = 32
     const TOTALWIDTH = NOTE_SIZE * 4 + NOTE_SPACINGX * 3
     const STARTX = SCREEN_CENTERX - TOTALWIDTH / 2
     const STARTY = 200
     const noteHighwayAssets = await Assets.loadBundle('note-highway')
+    const measureLine = new Graphics()
+      .moveTo(0.0, 0.0)
+      .lineTo(100.0, 0.0)
+      .stroke({ width: 4, color: 0xffffff })
 
     let position = 0
+    let measureCounter = 0
+    console.log(`noteArray: ${this.noteArray.length}`)
     for (let i = 0; i < this.noteArray.length; i++) {
+      measureCounter++
+      console.log(`measureCounter: ${measureCounter}`)
+      const measureContainer = new Container()
+      this.noteHighwayContainer.addChild(measureContainer)
+      measureContainer.x = STARTX + 1 * (NOTE_SIZE + NOTE_SPACINGX)
+      measureContainer.y = STARTY + position * NOTE_SPACINGY
+      console.log(`measureline x: ${measureContainer.x}, measureline y: ${measureContainer.y}`)
+      measureContainer.addChild(measureLine)
       const lines = this.noteArray[i].split('\n')
       for (let j = 0; j < lines.length; j++) {
         const line = lines[j]
-        if (line.trim() === '') continue // Skip empty lines
 
         for (let k = 0; k < line.length; k++) {
           const noteType = line[k]
@@ -84,14 +96,42 @@ class StepEngine {
             }
             //Hold Head
             case '2': {
+              noteSprite = new Sprite(
+                noteHighwayAssets[
+                  ['left_arrow', 'up_arrow', 'down_arrow', 'right_arrow'][direction]
+                ]
+              )
+              noteSprite.anchor.set(0.5)
+              noteSprite.x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
+              noteSprite.y = STARTY + position * NOTE_SPACINGY
+              console.log(`x: ${noteSprite.x}, y: ${noteSprite.y}`)
+              noteContainer.addChild(noteSprite)
               break
             }
             //Hold/Roll End
             case '3': {
+              noteSprite = new Sprite(
+                noteHighwayAssets[['hold', 'hold', 'hold', 'hold'][direction]]
+              )
+              noteSprite.anchor.set(0.5)
+              noteSprite.x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
+              noteSprite.y = STARTY + position * NOTE_SPACINGY
+              console.log(`x: ${noteSprite.x}, y: ${noteSprite.y}`)
+              noteContainer.addChild(noteSprite)
               break
             }
             //Roll Head
             case '4': {
+              noteSprite = new Sprite(
+                noteHighwayAssets[
+                  ['left_arrow', 'up_arrow', 'down_arrow', 'right_arrow'][direction]
+                ]
+              )
+              noteSprite.anchor.set(0.5)
+              noteSprite.x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
+              noteSprite.y = STARTY + position * NOTE_SPACINGY
+              console.log(`x: ${noteSprite.x}, y: ${noteSprite.y}`)
+              noteContainer.addChild(noteSprite)
               break
             }
             //Mine
@@ -122,8 +162,8 @@ class StepEngine {
           position++
         }
       }
-      this.app.stage.addChild(this.noteHighwayContainer)
     }
+    this.app.stage.addChild(this.noteHighwayContainer)
   }
 }
 
