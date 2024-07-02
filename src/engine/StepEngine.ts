@@ -68,6 +68,7 @@ class StepEngine {
       console.log(`measureline x: ${measureContainer.x}, measureline y: ${measureContainer.y}`)
       measureContainer.addChild(measureLine)
       const lines = this.noteArray[i].split('\n')
+      const totalNotesInMeasure = lines.length * lines[0].length
       for (let j = 0; j < lines.length; j++) {
         const line = lines[j]
 
@@ -90,9 +91,7 @@ class StepEngine {
               noteSprite.anchor.set(0.5)
               noteSprite.x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
               noteSprite.y = STARTY + position * NOTE_SPACINGY
-              const measureLengthInSeconds = 4.0 // Example measure length (adjust as needed)
-              const noteIndexInSeconds = position * 1.0 // Example note index in seconds (adjust as needed)
-              noteSprite.tint = this.calculateNoteColor(noteIndexInSeconds, measureLengthInSeconds)
+              noteSprite.tint = this.calculateNoteColor(position, totalNotesInMeasure)
               noteContainer.addChild(noteSprite)
               break
             }
@@ -167,23 +166,25 @@ class StepEngine {
     }
     this.app.stage.addChild(this.noteHighwayContainer)
   }
-  calculateNoteColor(noteIndexInSeconds: number, measureLengthInSeconds: number) {
-    const beatsPerMeasure = 4 // Assuming 4/4 time signature
-    const beatLengthInSeconds = measureLengthInSeconds / beatsPerMeasure
+  calculateNoteColor(noteIndex: number, totalNotesInMeasure: number) {
+    const fractionOfMeasure = (noteIndex % totalNotesInMeasure) / totalNotesInMeasure
 
-    // Determine the beat position of the note (1-based index)
-    const beatPosition = Math.floor(noteIndexInSeconds / beatLengthInSeconds) + 1
-
-    // Assign color based on the beat position
-    switch ((beatPosition - 1) % beatsPerMeasure) {
-      case 0:
-        return 0xff0000 // Red
-      case 1:
-        return 0x3333ff // Blue
-      case 2:
-        return 0x33ff33 // Green
-      default:
-        return 0xffffff // Default color (white)
+    if (
+      fractionOfMeasure === 0 ||
+      fractionOfMeasure === 0.25 ||
+      fractionOfMeasure === 0.5 ||
+      fractionOfMeasure === 0.75
+    ) {
+      return 0xff0000 // Red (Quarter notes)
+    } else if (
+      fractionOfMeasure === 0.125 ||
+      fractionOfMeasure === 0.375 ||
+      fractionOfMeasure === 0.625 ||
+      fractionOfMeasure === 0.875
+    ) {
+      return 0x3333ff // Blue (Eighth notes)
+    } else {
+      return 0x33ff33 // Green (16th notes)
     }
   }
 }
