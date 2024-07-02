@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { StepEngine } from '@/engine/StepEngine'
-import { defineComponent, onMounted, PropType, toRaw } from 'vue'
+import { defineComponent, onMounted, PropType } from 'vue'
 
 interface ChartData {
   chartHeader: string

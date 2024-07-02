@@ -45,7 +45,7 @@ class StepEngine {
     const SCREEN_CENTERY = this.app.screen.height / 2
     const NOTE_SIZE = 64
     const NOTE_SPACINGX = 64
-    const NOTE_SPACINGY = 32
+    const NOTE_SPACINGY = 64
     const TOTALWIDTH = NOTE_SIZE * 4 + NOTE_SPACINGX * 3
     const STARTX = SCREEN_CENTERX - TOTALWIDTH / 2
     const STARTY = 200
@@ -90,7 +90,9 @@ class StepEngine {
               noteSprite.anchor.set(0.5)
               noteSprite.x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
               noteSprite.y = STARTY + position * NOTE_SPACINGY
-              console.log(`x: ${noteSprite.x}, y: ${noteSprite.y}`)
+              const measureLengthInSeconds = 4.0 // Example measure length (adjust as needed)
+              const noteIndexInSeconds = position * 1.0 // Example note index in seconds (adjust as needed)
+              noteSprite.tint = this.calculateNoteColor(noteIndexInSeconds, measureLengthInSeconds)
               noteContainer.addChild(noteSprite)
               break
             }
@@ -159,11 +161,30 @@ class StepEngine {
               break
             }
           }
-          position++
         }
+        position++
       }
     }
     this.app.stage.addChild(this.noteHighwayContainer)
+  }
+  calculateNoteColor(noteIndexInSeconds: number, measureLengthInSeconds: number) {
+    const beatsPerMeasure = 4 // Assuming 4/4 time signature
+    const beatLengthInSeconds = measureLengthInSeconds / beatsPerMeasure
+
+    // Determine the beat position of the note (1-based index)
+    const beatPosition = Math.floor(noteIndexInSeconds / beatLengthInSeconds) + 1
+
+    // Assign color based on the beat position
+    switch ((beatPosition - 1) % beatsPerMeasure) {
+      case 0:
+        return 0xff0000 // Red
+      case 1:
+        return 0x3333ff // Blue
+      case 2:
+        return 0x33ff33 // Green
+      default:
+        return 0xffffff // Default color (white)
+    }
   }
 }
 
