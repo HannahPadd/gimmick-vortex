@@ -1,5 +1,16 @@
-# gimmick-vortex
+# Web Vortex
+A browser based stepfile editor.
+This is very much a work in progress!!! Everyone is welcome to submit pull requests.
 
+# Plans
+- the creation of new charts by uploading a song and being able to make a chart.
+- editting existing charts.
+- integrated .lua code generation for adding gimmicks to your stepfiles.
+- integrated web-based text editor for your .sm files for if you want to add custom lua.
+- a resource for new charters to see information about patterning, good practice etc.
+- support for all game modes (4 panel, 5 panel, etc...)
+
+# Building
 This template should help get you started developing with Vue 3 in Vite.
 
 ## Recommended IDE Setup
