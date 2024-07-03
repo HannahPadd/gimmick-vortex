@@ -68,10 +68,9 @@ class StepEngine {
       console.log(`measureline x: ${measureContainer.x}, measureline y: ${measureContainer.y}`)
       measureContainer.addChild(measureLine)
       const lines = this.noteArray[i].split('\n')
-      const totalNotesInMeasure = lines.length * lines[0].length
       for (let j = 0; j < lines.length; j++) {
         const line = lines[j]
-
+        console.log(`notes in measure ${lines.length}`)
         for (let k = 0; k < line.length; k++) {
           const noteType = line[k]
           const noteContainer = new Container()
@@ -91,7 +90,7 @@ class StepEngine {
               noteSprite.anchor.set(0.5)
               noteSprite.x = STARTX + direction * (NOTE_SIZE + NOTE_SPACINGX)
               noteSprite.y = STARTY + position * NOTE_SPACINGY
-              noteSprite.tint = this.calculateNoteColor(position, totalNotesInMeasure)
+              noteSprite.tint = this.calculateNoteColor(position, lines.length - 1)
               noteContainer.addChild(noteSprite)
               break
             }
