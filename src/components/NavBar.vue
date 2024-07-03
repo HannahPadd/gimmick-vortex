@@ -1,7 +1,7 @@
 <template>
   <header class="top-bar">
     <div class="top-bar-content">
-      <h1>Gimmick Vortex</h1>
+      <h1>Web Vortex</h1>
       <nav class="navigation"></nav>
     </div>
   </header>

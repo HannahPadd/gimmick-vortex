@@ -50,10 +50,6 @@ class StepEngine {
     const STARTX = SCREEN_CENTERX - TOTALWIDTH / 2
     const STARTY = 200
     const noteHighwayAssets = await Assets.loadBundle('note-highway')
-    const measureLine = new Graphics()
-      .moveTo(0.0, 0.0)
-      .lineTo(100.0, 0.0)
-      .stroke({ width: 4, color: 0xffffff })
 
     let position = 0
     let measureCounter = 0
@@ -66,7 +62,6 @@ class StepEngine {
       measureContainer.x = STARTX + 1 * (NOTE_SIZE + NOTE_SPACINGX)
       measureContainer.y = STARTY + position * NOTE_SPACINGY
       console.log(`measureline x: ${measureContainer.x}, measureline y: ${measureContainer.y}`)
-      measureContainer.addChild(measureLine)
       const lines = this.noteArray[i].split('\n')
       for (let j = 0; j < lines.length; j++) {
         const line = lines[j]
