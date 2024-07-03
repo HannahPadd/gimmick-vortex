@@ -1,5 +1,5 @@
 # Web Vortex
-A browser based stepfile editor.
+A browser based stepfile editor using vuejs, pixijs, typescript and golang
 This is very much a work in progress!!! Everyone is welcome to submit pull requests.
 
 # Plans
@@ -47,4 +47,10 @@ yarn build
 
 ```sh
 yarn lint
+```
+
+## Running Server
+```sh
+cd server
+run go main.go
 ```
