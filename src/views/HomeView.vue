@@ -21,4 +21,11 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.home {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+</style>

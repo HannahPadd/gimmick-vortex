@@ -79,7 +79,7 @@ class StepEngine {
             case '1': {
               noteSprite = new Sprite(
                 noteHighwayAssets[
-                  ['left_arrow', 'up_arrow', 'down_arrow', 'right_arrow'][direction]
+                  ['left_arrow', 'down_arrow', 'up_arrow', 'right_arrow'][direction]
                 ]
               )
               noteSprite.anchor.set(0.5)
@@ -93,7 +93,7 @@ class StepEngine {
             case '2': {
               noteSprite = new Sprite(
                 noteHighwayAssets[
-                  ['left_arrow', 'up_arrow', 'down_arrow', 'right_arrow'][direction]
+                  ['left_arrow', 'down_arrow', 'up_arrow', 'right_arrow'][direction]
                 ]
               )
               noteSprite.anchor.set(0.5)
@@ -119,7 +119,7 @@ class StepEngine {
             case '4': {
               noteSprite = new Sprite(
                 noteHighwayAssets[
-                  ['left_arrow', 'up_arrow', 'down_arrow', 'right_arrow'][direction]
+                  ['left_arrow', 'down_arrow', 'up_arrow', 'right_arrow'][direction]
                 ]
               )
               noteSprite.anchor.set(0.5)

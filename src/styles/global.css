@@ -74,3 +74,24 @@ body {
 .top-bar .navigation a:hover {
   color: #f5c2e7; /* Hover color */
 }
+
+.glass-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+  border: none;
+  border-radius: 20px; /* Rounded corners */
+  backdrop-filter: blur(10px); /* Blur effect for the glass look */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+.glass-button:active {
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

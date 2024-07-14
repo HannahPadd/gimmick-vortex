@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <input type="file" @change="handleFileChange" />
-    <button @click="handleFileUpload">Upload</button>
+  <div class="uploadComponent">
+    <input class="glass-button" type="file" @change="handleFileChange" />
+    <button class="glass-button" @click="handleFileUpload">Upload</button>
 
     <div v-if="isLoading">Loading...</div>
     <div v-else-if="songData">
@@ -85,3 +85,13 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+.uploadComponent {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+
+}
+</style>
