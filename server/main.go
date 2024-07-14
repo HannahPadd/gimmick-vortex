@@ -3,30 +3,33 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
 
 type SongData struct {
-	Title  string     `json:"title"`
-	Artist string     `json:"artist"`
-	BPMS   string     `json:"bpms"`
+	Title  string      `json:"title"`
+	Artist string      `json:"artist"`
+	BPMS   string      `json:"bpms"`
 	Charts []ChartData `json:"charts"`
 }
 
 type ChartData struct {
-	ChartHeader   string     `json:"chartHeader"`
-	Type          string     `json:"type"`
-	Tag           string     `json:"tag"`
-	Difficulty    string     `json:"difficulty"`
-	DifficultyNumber string     `json:"difficultyNumber"`
-	Notes         []string `json:"notes"`
+	ChartHeader      string   `json:"chartHeader"`
+	Type             string   `json:"type"`
+	Tag              string   `json:"tag"`
+	Difficulty       string   `json:"difficulty"`
+	DifficultyNumber string   `json:"difficultyNumber"`
+	Notes            []string `json:"notes"`
 }
 
 func uploadFileHandler(w http.ResponseWriter, r *http.Request) {
@@ -101,12 +104,12 @@ func parseSMFile(data string) (*SongData, error) {
 			if len(notes) > 0 {
 				// Add the previous chart data to songData.Charts
 				songData.Charts = append(songData.Charts, ChartData{
-					ChartHeader:     currentHeader,
-					Type:            currentType,
-					Tag:             currentTag,
-					Difficulty:      currentDifficulty,
+					ChartHeader:      currentHeader,
+					Type:             currentType,
+					Tag:              currentTag,
+					Difficulty:       currentDifficulty,
 					DifficultyNumber: currentDifficultyNumber,
-					Notes:           convertNotesToArrayString(notes),
+					Notes:            convertNotesToArrayString(notes),
 				})
 				notes = []string{} // Reset notes for the next chart
 				inNotesSection = false
@@ -136,12 +139,12 @@ func parseSMFile(data string) (*SongData, error) {
 	// Append the last chart if there are remaining notes
 	if len(notes) > 0 {
 		songData.Charts = append(songData.Charts, ChartData{
-			ChartHeader:     currentHeader,
-			Type:            currentType,
-			Tag:             currentTag,
-			Difficulty:      currentDifficulty,
+			ChartHeader:      currentHeader,
+			Type:             currentType,
+			Tag:              currentTag,
+			Difficulty:       currentDifficulty,
 			DifficultyNumber: currentDifficultyNumber,
-			Notes:           convertNotesToArrayString(notes),
+			Notes:            convertNotesToArrayString(notes),
 		})
 	}
 
@@ -152,7 +155,6 @@ func parseSMFile(data string) (*SongData, error) {
 	return songData, nil
 }
 
-
 // convertNotesTo2DArray converts a slice of note lines into a 2D array of strings
 // convertNotesToArrayString converts a slice of note lines into a slice of single string note blocks
 func convertNotesToArrayString(notes []string) []string {
@@ -162,7 +164,7 @@ func convertNotesToArrayString(notes []string) []string {
 	for _, note := range notes {
 		if note == "," {
 			if len(currentBlock) > 0 {
-				result = append(result, strings.Join(currentBlock, "\n") + "\n")
+				result = append(result, strings.Join(currentBlock, "\n")+"\n")
 				currentBlock = []string{}
 			}
 		} else {
@@ -171,23 +173,34 @@ func convertNotesToArrayString(notes []string) []string {
 	}
 
 	if len(currentBlock) > 0 {
-		result = append(result, strings.Join(currentBlock, "\n") + "\n")
+		result = append(result, strings.Join(currentBlock, "\n")+"\n")
 	}
 
 	return result
 }
 
-
 func trimSuffixColon(s string) string {
 	return strings.TrimSuffix(strings.TrimSpace(s), ":")
 }
 
-
 func main() {
+	path := "uploads"
+	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+		err := os.Mkdir(path, os.ModePerm)
+		if err != nil {
+			log.Println(err)
+		}
+	}
 	router := mux.NewRouter()
 	router.HandleFunc("/upload", uploadFileHandler).Methods("POST")
-
 	handler := cors.Default().Handler(router)
-	fmt.Println("Server is running on port 5000")
-	http.ListenAndServe(":5000", handler)
+	s := &http.Server{
+		Addr:           ":5000",
+		Handler:        handler,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
+	fmt.Println("Server is running on", s.Addr)
+	log.Fatal(s.ListenAndServe())
 }
